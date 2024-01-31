@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Produtor } from './entities/produtor.entity';
 import { CreateProdutorDto } from './dto/create-produtor.request.dto';
 import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 import { validCPF, validCNPJ } from '../helpers/utils';
 import { ProdutorRepository } from './produtor.repository';
-
 import TipoIdentificaoProdutor from '../enums/tipoIdentificacaoProdutor';
 import {
   ProdutorBadRequestException,

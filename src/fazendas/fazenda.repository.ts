@@ -1,5 +1,12 @@
-// src/fazendas/fazenda.repository.ts
-import { Repository } from 'typeorm';
-import { Fazenda } from './entities/fazenda.entity';
+import {DataSource, Repository} from 'typeorm';
+import {Injectable} from '@nestjs/common';
+import {Fazenda} from './entities/fazenda.entity';
 
-export class FazendaRepository extends Repository<Fazenda> {}
+@Injectable()
+export class FazendaRepository extends Repository<Fazenda>
+{
+    constructor(private dataSource: DataSource)
+    {
+        super(Fazenda, dataSource.createEntityManager());
+    }
+}

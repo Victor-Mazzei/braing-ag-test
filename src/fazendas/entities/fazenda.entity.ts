@@ -20,7 +20,7 @@ export class Fazenda {
   @Column({ length: 255 })
   cidade: string;
 
-  @Column({ length: 255 })
+  @Column({ length: 2 })
   estado: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
@@ -35,7 +35,4 @@ export class Fazenda {
   @ManyToOne(() => Produtor, (produtor) => produtor.fazendas)
   produtor: Produtor;
 
-  @Index('idx_produtor_id')
-  @RelationId((fazenda: Fazenda) => fazenda.produtor)
-  produtorId: number;
 }

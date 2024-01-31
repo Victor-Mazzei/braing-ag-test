@@ -2,12 +2,14 @@ import { Controller, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProdutoresService } from './produtores.service';
 import { CreateProdutorDto } from './dto/create-produtor.request.dto';
 import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('produtores')
+@ApiTags('Produtor')
+@Controller('produtor')
 export class ProdutoresController {
   constructor(private readonly produtoresService: ProdutoresService) {}
 
-  @Post('/create')
+  @Post('')
   create(@Body() createProdutorDto: CreateProdutorDto) {
     try {
       return this.produtoresService.create(createProdutorDto);

@@ -16,7 +16,7 @@ async function bootstrap() {
     .setVersion(configService.get('api_version'))
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('doc', app, document);
 
   app.use(
     helmet({
@@ -31,7 +31,7 @@ async function bootstrap() {
     }),
   );
   app.setGlobalPrefix('v1');
-  app.use(csurf());
+  //app.use(csurf());
   app.enableCors();
   await app.listen(port);
 }
