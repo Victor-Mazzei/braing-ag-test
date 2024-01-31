@@ -7,11 +7,8 @@ import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 import { validCPF, validCNPJ } from '../helpers/utils';
 import { ProdutorRepository } from './produtor.repository';
 
+import TipoIdentificaoProdutor from "../enums/tipoIdentificacaoProdutor";
 
-enum TypeIdentificationProdutor {
-    CPF = "CPF",
-    CNPJ = "CNPJ"
-}
 
 @Injectable()
 export class ProdutoresService {
@@ -22,7 +19,7 @@ export class ProdutoresService {
 
     async create(createProdutorDto: CreateProdutorDto): Promise<Produtor> {
         //check type
-        if (!(createProdutorDto.tipoIdentificacao in TypeIdentificationProdutor)) {
+        if (!(createProdutorDto.tipoIdentificacao in TipoIdentificaoProdutor)) {
             throw new BadRequestException(`Verifique os dados, ${createProdutorDto.tipoIdentificacao} não permitido.`);
         }
         
@@ -64,8 +61,8 @@ export class ProdutoresService {
 
     checkIDFiscalType (produtorDto: CreateProdutorDto | UpdateProdutorDto) : Boolean {
         if(
-            (produtorDto.tipoIdentificacao == TypeIdentificationProdutor.CPF && validCPF(produtorDto.identificacaoFiscal)) || 
-            (produtorDto.tipoIdentificacao == TypeIdentificationProdutor.CNPJ && validCNPJ(produtorDto.identificacaoFiscal))
+            (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CPF && validCPF(produtorDto.identificacaoFiscal)) || 
+            (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CNPJ && validCNPJ(produtorDto.identificacaoFiscal))
         ) {
             return true;
         }

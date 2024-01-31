@@ -5,3 +5,5 @@ enum Culturas {
     CAFE="CAFE", 
     CANA_DE_ACUCAR="CANA_DE_ACUCAR"
 }
+
+export default Culturas;

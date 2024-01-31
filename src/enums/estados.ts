@@ -28,3 +28,4 @@ enum Estados {
     TO="TO",
 }
     
+export default Estados
