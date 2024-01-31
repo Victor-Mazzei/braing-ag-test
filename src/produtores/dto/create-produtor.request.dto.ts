@@ -1,7 +1,7 @@
 // src/produtores/dto/create-produtor.dto.ts
 import { IsString, Length, IsNotEmpty, Matches } from 'class-validator';
 
-export class CreateProdutorDTO {
+export class CreateProdutorDto {
   @IsString()
   @IsNotEmpty()
   @Length(11, 14)

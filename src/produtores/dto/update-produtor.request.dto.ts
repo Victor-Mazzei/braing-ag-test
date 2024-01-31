@@ -1,7 +1,7 @@
 // src/produtores/dto/update-produtor.dto.ts
 import { IsString, Length, IsNotEmpty, IsOptional, Matches } from 'class-validator';
 
-export class UpdateProdutorDTO {
+export class UpdateProdutorDto {
     @IsString()
     @IsNotEmpty()
     @Length(11, 14)

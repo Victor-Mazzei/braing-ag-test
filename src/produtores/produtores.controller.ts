@@ -1,19 +1,40 @@
-import { Controller, Post, Body, Patch, Param } from '@nestjs/common';
+import { Controller, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ProdutoresService } from './produtores.service';
-import { CreateProdutorDTO } from './dto/create-produtor.dto';
-import { UpdateProdutorDTO } from './dto/update-produtor.dto';
+import { CreateProdutorDto } from './dto/create-produtor.request.dto';
+import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 
 @Controller('produtores')
 export class ProdutoresController {
     constructor(private readonly produtoresService: ProdutoresService) {}
 
     @Post('/create')
-    create(@Body() createProdutorDTO: CreateProdutorDTO) {
-        return this.produtoresService.create(createProdutorDTO);
+    create(@Body() createProdutorDto: CreateProdutorDto) {
+        try {
+            return this.produtoresService.create(createProdutorDto);
+        } catch (error) {
+            throw error
+        }
+        
     }
 
     @Patch('/:id')
-    update(@Param('id') id: string, @Body() updateProdutorDTO: UpdateProdutorDTO) {
-        return this.produtoresService.update(parseInt(id), updateProdutorDTO);
+    update(@Param('id') id: string, @Body() updateProdutorDto: UpdateProdutorDto) {
+        try {
+            return this.produtoresService.update(parseInt(id), updateProdutorDto);
+        } catch (error) {
+            throw error
+        }
+       
     }
+
+    @Delete('/:id')
+    delete(@Param('id') id : string) {
+        try {
+            return this.produtoresService.delete(parseInt(id));
+        } catch (error) {
+            throw error
+        }
+        
+    }
+
 }

@@ -2,8 +2,8 @@ import { Injectable, NotFoundException, BadRequestException  } from '@nestjs/com
 import { InjectRepository } from '@nestjs/typeorm';
 //import { Repository } from 'typeorm';
 import { Produtor } from './entities/produtor.entity';
-import { CreateProdutorDTO } from './dto/create-produtor.dto';
-import { UpdateProdutorDTO } from './dto/update-produtor.dto';
+import { CreateProdutorDto } from './dto/create-produtor.request.dto';
+import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 import { validCPF, validCNPJ } from '../helpers/utils';
 import { ProdutorRepository } from './produtor.repository';
 
@@ -20,23 +20,23 @@ export class ProdutoresService {
         private produtorRepository: ProdutorRepository,
     ) {}
 
-    async create(createProdutorDTO: CreateProdutorDTO): Promise<Produtor> {
+    async create(createProdutorDto: CreateProdutorDto): Promise<Produtor> {
         //check type
-        if (!(createProdutorDTO.tipoIdentificacao in TypeIdentificationProdutor)) {
-            throw new BadRequestException(`Verifique os dados, ${createProdutorDTO.tipoIdentificacao} não permitido.`);
+        if (!(createProdutorDto.tipoIdentificacao in TypeIdentificationProdutor)) {
+            throw new BadRequestException(`Verifique os dados, ${createProdutorDto.tipoIdentificacao} não permitido.`);
         }
         
-        if(!this.checkIDFiscalType(createProdutorDTO)) {
+        if(!this.checkIDFiscalType(createProdutorDto)) {
             throw new BadRequestException(`Verifique os dados enviados`);
         }
 
-        const produtor = this.produtorRepository.create(createProdutorDTO);
+        const produtor = this.produtorRepository.create(createProdutorDto);
         return this.produtorRepository.save(produtor);
 
        
     }
 
-    async update(id: number, updateProdutorDTO: UpdateProdutorDTO): Promise<Produtor> {
+    async update(id: number, updateProdutorDto: UpdateProdutorDto): Promise<Produtor> {
         const produtor = await this.produtorRepository.findOne({ where: {
                 id: id
             }
@@ -46,15 +46,15 @@ export class ProdutoresService {
             throw new NotFoundException(`Produtor com ID ${id} não encontrado.`);
         }
 
-        if(updateProdutorDTO.identificacaoFiscal && updateProdutorDTO.tipoIdentificacao) {
+        if(updateProdutorDto.identificacaoFiscal && updateProdutorDto.tipoIdentificacao) {
             //check type
-            if(!this.checkIDFiscalType(updateProdutorDTO)) {
+            if(!this.checkIDFiscalType(updateProdutorDto)) {
                 throw new BadRequestException(`Verifique os dados enviados`);
             }
         }
 
          // Atualiza as propriedades do produtor
-         Object.assign(produtor, updateProdutorDTO);
+         Object.assign(produtor, updateProdutorDto);
             
          return this.produtorRepository.save(produtor);
         
@@ -62,14 +62,18 @@ export class ProdutoresService {
     }
 
 
-    private checkIDFiscalType (produtorDTO: CreateProdutorDTO | UpdateProdutorDTO) : Boolean {
+    checkIDFiscalType (produtorDto: CreateProdutorDto | UpdateProdutorDto) : Boolean {
         if(
-            (produtorDTO.tipoIdentificacao == TypeIdentificationProdutor.CPF && validCPF(produtorDTO.identificacaoFiscal)) || 
-            (produtorDTO.tipoIdentificacao == TypeIdentificationProdutor.CNPJ && validCNPJ(produtorDTO.identificacaoFiscal))
+            (produtorDto.tipoIdentificacao == TypeIdentificationProdutor.CPF && validCPF(produtorDto.identificacaoFiscal)) || 
+            (produtorDto.tipoIdentificacao == TypeIdentificationProdutor.CNPJ && validCNPJ(produtorDto.identificacaoFiscal))
         ) {
             return true;
         }
         return false;
+    }
+
+    async delete(id: number): Promise<void> {
+        await this.produtorRepository.delete(id);
     }
 
     // Outros métodos para listar, atualizar e deletar produtores
