@@ -1,7 +1,7 @@
 // src/fazendas/dto/create-fazenda.dto.ts
 import { IsString, IsNotEmpty, Min, IsNumber } from 'class-validator';
 
-export class CreateFazendaDTO {
+export class CreateFazendaDto {
   @IsString()
   @IsNotEmpty()
   nome: string;
