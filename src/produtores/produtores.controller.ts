@@ -5,36 +5,35 @@ import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 
 @Controller('produtores')
 export class ProdutoresController {
-    constructor(private readonly produtoresService: ProdutoresService) {}
+  constructor(private readonly produtoresService: ProdutoresService) {}
 
-    @Post('/create')
-    create(@Body() createProdutorDto: CreateProdutorDto) {
-        try {
-            return this.produtoresService.create(createProdutorDto);
-        } catch (error) {
-            throw error
-        }
-        
+  @Post('/create')
+  create(@Body() createProdutorDto: CreateProdutorDto) {
+    try {
+      return this.produtoresService.create(createProdutorDto);
+    } catch (error) {
+      throw error;
     }
+  }
 
-    @Patch('/:id')
-    update(@Param('id') id: string, @Body() updateProdutorDto: UpdateProdutorDto) {
-        try {
-            return this.produtoresService.update(parseInt(id), updateProdutorDto);
-        } catch (error) {
-            throw error
-        }
-       
+  @Patch('/:id')
+  update(
+    @Param('id') id: string,
+    @Body() updateProdutorDto: UpdateProdutorDto,
+  ) {
+    try {
+      return this.produtoresService.update(parseInt(id), updateProdutorDto);
+    } catch (error) {
+      throw error;
     }
+  }
 
-    @Delete('/:id')
-    delete(@Param('id') id : string) {
-        try {
-            return this.produtoresService.delete(parseInt(id));
-        } catch (error) {
-            throw error
-        }
-        
+  @Delete('/:id')
+  delete(@Param('id') id: string) {
+    try {
+      return this.produtoresService.delete(parseInt(id));
+    } catch (error) {
+      throw error;
     }
-
+  }
 }

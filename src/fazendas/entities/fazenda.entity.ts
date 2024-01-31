@@ -1,5 +1,12 @@
 // src/fazendas/entities/fazenda.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  Index,
+  RelationId,
+} from 'typeorm';
 import { Produtor } from '../../produtores/entities/produtor.entity';
 
 @Entity()
@@ -27,4 +34,8 @@ export class Fazenda {
 
   @ManyToOne(() => Produtor, (produtor) => produtor.fazendas)
   produtor: Produtor;
+
+  @Index('idx_produtor_id')
+  @RelationId((fazenda: Fazenda) => fazenda.produtor)
+  produtorId: number;
 }

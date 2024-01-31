@@ -1,77 +1,83 @@
-import { Injectable, NotFoundException, BadRequestException  } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-//import { Repository } from 'typeorm';
 import { Produtor } from './entities/produtor.entity';
 import { CreateProdutorDto } from './dto/create-produtor.request.dto';
 import { UpdateProdutorDto } from './dto/update-produtor.request.dto';
 import { validCPF, validCNPJ } from '../helpers/utils';
 import { ProdutorRepository } from './produtor.repository';
 
-import TipoIdentificaoProdutor from "../enums/tipoIdentificacaoProdutor";
-
+import TipoIdentificaoProdutor from '../enums/tipoIdentificacaoProdutor';
+import {
+  ProdutorBadRequestException,
+  ProdutorNotFoundException,
+} from 'src/exceptions/produtor.exception';
 
 @Injectable()
 export class ProdutoresService {
-    constructor(
-        @InjectRepository(Produtor)
-        private produtorRepository: ProdutorRepository,
-    ) {}
+  constructor(
+    @InjectRepository(Produtor)
+    private produtorRepository: ProdutorRepository,
+  ) {}
 
-    async create(createProdutorDto: CreateProdutorDto): Promise<Produtor> {
-        //check type
-        if (!(createProdutorDto.tipoIdentificacao in TipoIdentificaoProdutor)) {
-            throw new BadRequestException(`Verifique os dados, ${createProdutorDto.tipoIdentificacao} não permitido.`);
-        }
-        
-        if(!this.checkIDFiscalType(createProdutorDto)) {
-            throw new BadRequestException(`Verifique os dados enviados`);
-        }
-
-        const produtor = this.produtorRepository.create(createProdutorDto);
-        return this.produtorRepository.save(produtor);
-
-       
+  async create(createProdutorDto: CreateProdutorDto): Promise<Produtor> {
+    //check type
+    if (!(createProdutorDto.tipoIdentificacao in TipoIdentificaoProdutor)) {
+      throw new ProdutorBadRequestException();
     }
 
-    async update(id: number, updateProdutorDto: UpdateProdutorDto): Promise<Produtor> {
-        const produtor = await this.produtorRepository.findOne({ where: {
-                id: id
-            }
-        });
-
-        if (!produtor) {
-            throw new NotFoundException(`Produtor com ID ${id} não encontrado.`);
-        }
-
-        if(updateProdutorDto.identificacaoFiscal && updateProdutorDto.tipoIdentificacao) {
-            //check type
-            if(!this.checkIDFiscalType(updateProdutorDto)) {
-                throw new BadRequestException(`Verifique os dados enviados`);
-            }
-        }
-
-         // Atualiza as propriedades do produtor
-         Object.assign(produtor, updateProdutorDto);
-            
-         return this.produtorRepository.save(produtor);
-        
-        
+    if (!this.checkIDFiscalType(createProdutorDto)) {
+      throw new ProdutorBadRequestException();
     }
 
+    const produtor = this.produtorRepository.create(createProdutorDto);
+    return this.produtorRepository.save(produtor);
+  }
 
-    checkIDFiscalType (produtorDto: CreateProdutorDto | UpdateProdutorDto) : Boolean {
-        if(
-            (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CPF && validCPF(produtorDto.identificacaoFiscal)) || 
-            (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CNPJ && validCNPJ(produtorDto.identificacaoFiscal))
-        ) {
-            return true;
-        }
-        return false;
+  async update(
+    id: number,
+    updateProdutorDto: UpdateProdutorDto,
+  ): Promise<Produtor> {
+    const produtor = await this.produtorRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!produtor) {
+      throw new ProdutorNotFoundException();
     }
 
-    async delete(id: number): Promise<void> {
-        await this.produtorRepository.delete(id);
+    if (
+      updateProdutorDto.identificacaoFiscal &&
+      updateProdutorDto.tipoIdentificacao
+    ) {
+      //check type
+      if (!this.checkIDFiscalType(updateProdutorDto)) {
+        throw new ProdutorBadRequestException();
+      }
     }
 
-    // Outros métodos para listar, atualizar e deletar produtores
+    // Atualiza as propriedades do produtor
+    Object.assign(produtor, updateProdutorDto);
+
+    return this.produtorRepository.save(produtor);
+  }
+
+  checkIDFiscalType(
+    produtorDto: CreateProdutorDto | UpdateProdutorDto,
+  ): boolean {
+    if (
+      (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CPF &&
+        validCPF(produtorDto.identificacaoFiscal)) ||
+      (produtorDto.tipoIdentificacao == TipoIdentificaoProdutor.CNPJ &&
+        validCNPJ(produtorDto.identificacaoFiscal))
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.produtorRepository.delete(id);
+  }
 }

@@ -1,5 +1,5 @@
- enum TipoIdentificaoProdutor {
-    CPF = "CPF",
-    CNPJ = "CNPJ"
+enum TipoIdentificaoProdutor {
+  CPF = 'CPF',
+  CNPJ = 'CNPJ',
 }
-export default TipoIdentificaoProdutor
+export default TipoIdentificaoProdutor;

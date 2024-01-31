@@ -9,12 +9,12 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get('port');
-  
+
   const config = new DocumentBuilder()
-  .setTitle(configService.get('api_title'))
-  .setDescription(configService.get('api_description'))
-  .setVersion(configService.get('api_version'))
-  .build();
+    .setTitle(configService.get('api_title'))
+    .setDescription(configService.get('api_description'))
+    .setVersion(configService.get('api_version'))
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
@@ -28,7 +28,7 @@ async function bootstrap() {
           scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
         },
       },
-    })
+    }),
   );
   app.setGlobalPrefix('v1');
   app.use(csurf());

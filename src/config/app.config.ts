@@ -5,5 +5,5 @@ export default registerAs('config', () => ({
   node_env: process.env.NODE_ENV,
   api_title: process.env.API_TITLE,
   api_description: process.env.API_DESCRIPTION,
-  api_version: process.env.API_VERSION
+  api_version: process.env.API_VERSION,
 }));

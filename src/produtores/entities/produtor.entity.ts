@@ -1,5 +1,11 @@
 // src/produtores/entities/produtor.entity.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  Index,
+} from 'typeorm';
 import { Fazenda } from '../../fazendas/entities/fazenda.entity';
 
 @Entity()
@@ -7,6 +13,7 @@ export class Produtor {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index('idx_identificacao_fiscal')
   @Column({ length: 14, unique: true })
   identificacaoFiscal: string;
 
@@ -17,6 +24,8 @@ export class Produtor {
   nome: string;
 
   // Relacionamento com Fazendas
-  @OneToMany(() => Fazenda, (fazenda) => fazenda.produtor)
+  @OneToMany(() => Fazenda, (fazenda) => fazenda.produtor, {
+    onDelete: 'CASCADE',
+  })
   fazendas: Fazenda[];
 }
