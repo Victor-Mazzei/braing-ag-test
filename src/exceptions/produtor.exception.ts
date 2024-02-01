@@ -7,7 +7,7 @@ export class ProdutorNotFoundException extends HttpException {
 }
 
 export class ProdutorBadRequestException extends HttpException {
-  constructor() {
-    super('Verifique os dados enviados.', HttpStatus.BAD_REQUEST);
+  constructor(message = '') {
+    super('Verifique os dados enviados. ' + message, HttpStatus.BAD_REQUEST);
   }
 }

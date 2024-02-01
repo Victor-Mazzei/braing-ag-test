@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
-import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -31,7 +30,6 @@ async function bootstrap() {
     }),
   );
   app.setGlobalPrefix('v1');
-  //app.use(csurf());
   app.enableCors();
   await app.listen(port);
 }

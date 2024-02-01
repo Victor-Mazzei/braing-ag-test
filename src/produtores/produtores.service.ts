@@ -1,6 +1,4 @@
-import {
-  Injectable,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Produtor } from './entities/produtor.entity';
 import { CreateProdutorDto } from './dto/create-produtor.request.dto';
@@ -56,6 +54,15 @@ export class ProdutoresService {
       if (!this.checkIDFiscalType(updateProdutorDto)) {
         throw new ProdutorBadRequestException();
       }
+    }
+
+    if (
+      updateProdutorDto.identificacaoFiscal &&
+      !updateProdutorDto.tipoIdentificacao
+    ) {
+      throw new ProdutorBadRequestException(
+        'Campo tipo identificação obrigatório',
+      );
     }
 
     // Atualiza as propriedades do produtor

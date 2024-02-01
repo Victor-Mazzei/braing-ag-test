@@ -21,8 +21,8 @@ import { FazendasModule } from './fazendas/fazendas.module';
       inject: [ConfigService],
     }),
     ProdutoresModule,
-    FazendasModule, 
-    CulturasModule
+    FazendasModule,
+    CulturasModule,
   ],
 })
 export class AppModule {}
