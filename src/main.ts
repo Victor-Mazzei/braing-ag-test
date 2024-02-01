@@ -29,7 +29,7 @@ async function bootstrap() {
       },
     }),
   );
-  app.setGlobalPrefix('v1');
+  app.setGlobalPrefix('v1/api');
   app.enableCors();
   await app.listen(port);
 }
