@@ -3,11 +3,14 @@ import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { TypeOrmExceptionFilter } from './global-filters/typeorm-exception.filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get('port');
+
+  app.setGlobalPrefix('v1/api');
 
   const config = new DocumentBuilder()
     .setTitle(configService.get('api_title'))
@@ -15,7 +18,7 @@ async function bootstrap() {
     .setVersion(configService.get('api_version'))
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('doc', app, document);
+  SwaggerModule.setup('doc/', app, document);
 
   app.use(
     helmet({
@@ -29,7 +32,7 @@ async function bootstrap() {
       },
     }),
   );
-  app.setGlobalPrefix('v1/api');
+  app.useGlobalFilters(new TypeOrmExceptionFilter());
   app.enableCors();
   await app.listen(port);
 }
