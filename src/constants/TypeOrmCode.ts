@@ -1,0 +1,1 @@
+export const UNIQUE_CPF_CNPJ_KEY = 23505
